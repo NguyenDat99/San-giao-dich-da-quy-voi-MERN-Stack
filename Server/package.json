@@ -1,0 +1,53 @@
+{
+  "name": "sangiaodichdaquy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index"
+  },
+  "author": "Dat Nguyen",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "auto-bind": "^1.1.0",
+    "bcrypt": "3.0.6",
+    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "console-stamp": "^0.2.6",
+    "cor": "^0.0.0",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "eslint": "^6.6.0",
+    "express": "^4.16.2",
+    "http-status-codes": "^1.3.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.24.0",
+    "mongoose": "^5.7.5",
+    "mongoose-aggregate-paginate": "^1.1.3",
+    "mongoose-paginate": "^5.0.3",
+    "morgan": "^1.9.0",
+    "node-fetch": "^2.1.2",
+    "node-pre-gyp": "^0.13.0",
+    "node-schedule": "^1.3.0",
+    "nodemailer": "^6.3.0",
+    "short-id": "0.1.0-1",
+    "shortid": "^2.2.10",
+    "validator": "^10.4.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "cross-env": "^5.2.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "nodemon": "^1.19.4"
+  }
+}
