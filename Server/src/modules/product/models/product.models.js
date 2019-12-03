@@ -5,6 +5,7 @@ import {
     ProductStatus
 } from '../commons/product.status';
 
+
 const ProductSchema = new Schema({
     productName: {
         type: String,
@@ -26,7 +27,7 @@ const ProductSchema = new Schema({
     properties: {}
 }, {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
 });
 
 export default mongoose.model('Product', ProductSchema);

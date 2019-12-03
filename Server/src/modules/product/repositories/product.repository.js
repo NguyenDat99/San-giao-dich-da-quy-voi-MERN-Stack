@@ -11,7 +11,7 @@ const getProduct = async (_id) => {
     return result;
 };
 const getAllProducts = async () => {
-    var result = await ProductModel.find({ status: ProductStatus.ACTIVE });
+    var result = await ProductModel.find({ status: ProductStatus.ACTIVE }).where('_id');
     result.forEach(forEachFunc)
     function forEachFunc(item, index) {
       //for (const element of item.properties)
@@ -22,10 +22,14 @@ const getAllProducts = async () => {
 })
     }
     var s=[]
+    var id=[]
     for(var i=0;i<result.length;i++){
-      var s1=[{productName: result[i].productName,properties:result[i].properties}]
+      var s1=[{productID:result[i]._id,productName: result[i].productName,
+        total: result[i].total
+        ,properties:result[i].properties}]
       s.push(s1)
     }
+    console.log(result);
     return s
     // return result;
 };
