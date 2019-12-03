@@ -7,12 +7,26 @@ const createProduct = async (data) => {
 };
 
 const getProduct = async (_id) => {
-    const result = await ProductModel.findOne({ _id, status: ProductStatus.ACTIVE });
+    var result = await ProductModel.findOne({ _id, status: ProductStatus.ACTIVE });
     return result;
 };
 const getAllProducts = async () => {
-    const result = await ProductModel.find({ status: ProductStatus.ACTIVE });
-    return result;
+    var result = await ProductModel.find({ status: ProductStatus.ACTIVE });
+    result.forEach(forEachFunc)
+    function forEachFunc(item, index) {
+      //for (const element of item.properties)
+      Object.keys(item.properties).forEach(key => {
+        if(item.properties[key].status== "UNACTIVE")
+            delete  item.properties[key]
+})
+    }
+    var s=[]
+    for(var i=0;i<result.length;i++){
+      var s1=[{productName: result[i].productName,properties:result[i].properties}]
+      s.push(s1)
+    }
+    return s
+    // return result;
 };
 
 const updateProduct = async (_id, data) => {

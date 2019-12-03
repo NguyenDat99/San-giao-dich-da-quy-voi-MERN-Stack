@@ -8,7 +8,7 @@ import {
 const ProductSchema = new Schema({
     productName: {
         type: String,
-        required: true,
+        required: true
     },
     total: {
         type: Number,
