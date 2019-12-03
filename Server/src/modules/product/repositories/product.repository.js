@@ -15,6 +15,7 @@ const getAllProducts = async () => {
     result.forEach(forEachFunc)
     function forEachFunc(item, index) {
       //for (const element of item.properties)
+      if( item.properties!= undefined)
       Object.keys(item.properties).forEach(key => {
         if(item.properties[key].status== "UNACTIVE")
             delete  item.properties[key]
