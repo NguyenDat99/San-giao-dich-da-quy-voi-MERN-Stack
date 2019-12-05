@@ -13,9 +13,11 @@ router.put('/product/:productId', ProductValidate.updateProductInput, ProductCon
 
 // GET
 router.get('/product/:productId', ProductValidate.getProductInput, ProductController.getProduct);
+// router.get('/product/:page/:limit', ProductValidate.getAllProductInput, ProductController.getAllProducts);
+//get all products
 router.get('/product', ProductValidate.getAllProductInput, ProductController.getAllProducts);
-
+router.get('/product/category/search', ProductValidate.getAllProductInputByCategoryId, ProductController.getAllProducts);
 
 // DELETE
-router.delete('/product/:productId', ProductValidate.blockProductInput, ProductController.blockProduct);
+router.delete('/product/:categoryId', ProductValidate.blockProductInput, ProductController.blockProduct);
 export default router;

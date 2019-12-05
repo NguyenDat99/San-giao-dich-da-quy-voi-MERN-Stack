@@ -24,6 +24,11 @@ const ProductSchema = new Schema({
     //     ref: 'Account',
     // },
     // ,
+    categoryId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true,
+    },
     properties: {}
 }, {
     versionKey: false,

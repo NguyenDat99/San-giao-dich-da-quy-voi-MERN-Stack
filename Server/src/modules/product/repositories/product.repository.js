@@ -10,29 +10,41 @@ const getProduct = async (_id) => {
     var result = await ProductModel.findOne({ _id, status: ProductStatus.ACTIVE });
     return result;
 };
-const getAllProducts = async () => {
-    var result = await ProductModel.find({ status: ProductStatus.ACTIVE }).where('_id');
-    result.forEach(forEachFunc)
-    function forEachFunc(item, index) {
-      //for (const element of item.properties)
-      if( item.properties!= undefined)
-      Object.keys(item.properties).forEach(key => {
-        if(item.properties[key].status== "UNACTIVE")
-            delete  item.properties[key]
-})
-    }
-    var s=[]
-    var id=[]
-    for(var i=0;i<result.length;i++){
-      var s1=[{productID:result[i]._id,productName: result[i].productName,
-        total: result[i].total
-        ,properties:result[i].properties}]
-      s.push(s1)
-    }
-    console.log(result);
-    return s
-    // return result;
+const getAllProducts = async (page,limit) => {
+    var result = await ProductModel
+    .find({ status: ProductStatus.ACTIVE })
+    .where('_id')
+      .limit(limit)
+      .skip(limit*page);
+//     result.forEach(forEachFunc)
+//     function forEachFunc(item, index) {
+//       //for (const element of item.properties)
+//       if( item.properties!= undefined)
+//       Object.keys(item.properties).forEach(key => {
+//         if(item.properties[key].status== "UNACTIVE")
+//             delete  item.properties[key]
+// })
+//     }
+//     var s=[]
+//     var id=[]
+//     for(var i=0;i<result.length;i++){
+//       var s1=[{productID:result[i]._id,productName: result[i].productName,
+//         total: result[i].total
+//         ,properties:result[i].properties}]
+//       s.push(s1)
+//     }
+//     return s
+    return result;
 };
+const getAllProductInputByCategoryId = async (page,limit,CategoryId) => {
+    var result = await ProductModel
+    .find({ status: ProductStatus.ACTIVE,CategoryId: CategoryId })
+    .where('_id')
+      .limit(limit)
+      .skip(limit*page);
+    return result;
+};
+
 
 const updateProduct = async (_id, data) => {
     const result = await ProductModel.updateOne({
