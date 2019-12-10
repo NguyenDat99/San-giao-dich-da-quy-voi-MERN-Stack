@@ -4,6 +4,8 @@ import {
   SanGiaoDichDaQuy_DB_URL
 } from '../config/database.config';
 
+
+
 export async function MongoDBConnect() {
     let link = SanGiaoDichDaQuy_DB_URL;
     if (process.env.NODE_ENV === 'production' && process.env.SanGiaoDichDaQuy_DB_URL) {
