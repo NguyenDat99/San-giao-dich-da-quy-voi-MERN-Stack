@@ -55,13 +55,14 @@ const getAllProducts = async (req, res) => {
     let parsedQs = querystring.parse(parsedUrl.query);
     const page = parsedQs.page
     const limit = parsedQs.limit
+    const setting=parsedQs.setting
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetProductsErrors.AUTH_FAIL);
         if (authenData.role !== AccountRole.MANAGER) {
             throw new Unauthorized(GetProductsErrors.NO_RIGHT);
         }
-        const products = await ProductRepository.getAllProducts(parseInt(page),parseInt(limit));
+        const products = await ProductRepository.getAllProducts(parseInt(page),parseInt(limit),setting);
         if (!products) throw new NotFoundError(GetProductsErrors.GET_FAIL);
         return res.onSuccess(products);
     } catch (error) {
@@ -96,13 +97,18 @@ const getAllProductInputByCategoryId = async (req, res) => {
 const getProduct = async (req, res) => {
     const { jwt } = req.headers;
     const productId = req.params.productId;
+
+    let parsedUrl = url.parse(req.url);
+    let parsedQs = querystring.parse(parsedUrl.query);
+    const setting=parsedQs.setting
+
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetProductErrors.AUTH_FAIL);
         if (authenData.role !== AccountRole.MANAGER) {
             throw new Unauthorized(GetProductErrors.NO_RIGHT);
         }
-        const product = await ProductRepository.getProduct(productId);
+        const product = await ProductRepository.getProduct(productId,setting);
         if (!product) throw new NotFoundError(GetProductErrors.GET_FAIL);
         return res.onSuccess(product);
     } catch (error) {

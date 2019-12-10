@@ -11,6 +11,9 @@ const ProductSchema = new Schema({
         type: String,
         required: true
     },
+    avatar: {
+        type: String,
+    },
     total: {
         type: Number,
         required: true
@@ -28,7 +31,13 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Category',
         required: true,
-    },
+    }
+    ,
+    maxSizeOfProperties:{
+      type: Number,
+      default: 5
+    }
+    ,
     properties: {}
 }, {
     versionKey: false,
