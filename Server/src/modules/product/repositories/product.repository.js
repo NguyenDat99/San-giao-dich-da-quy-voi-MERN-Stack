@@ -1,52 +1,61 @@
 import ProductModel from '../models/product.models';
+import SettingModel  from '../models/setting.model';
 import {
   ProductStatus
 } from '../commons/product.status';
 
 const createProduct = async (data) => {
-  var maxSizeOfProperties = 5
-  if (data.maxSizeOfProperties != undefined)
-    maxSizeOfProperties = data.maxSizeOfProperties
-  var keyCount = 0
-  Object.keys(data.properties).forEach(key => {
-    if (data.properties[key].status == "ACTIVE")
-      keyCount += 1
-  })
-  if (keyCount > maxSizeOfProperties) return NaN
+  // var maxSizeOfProperties = 5
+  // if (data.maxSizeOfProperties != undefined)
+  //   maxSizeOfProperties = data.maxSizeOfProperties
+  // var keyCount = 0
+  // Object.keys(data.properties).forEach(key => {
+  //   if (data.properties[key].status == "ACTIVE")
+  //     keyCount += 1
+  // })
+  // if (keyCount > maxSizeOfProperties) return NaN
   const result = await ProductModel.create(data);
   return result;
 };
+
+const createSetting = async (data) => {
+  const result = await SettingModel.create(data);
+  return result;
+}
 
 const getProduct = async (_id, setting) => {
   var result = await ProductModel.findOne({
     _id,
     status: ProductStatus.ACTIVE
   });
-  //xu ly setting
-  if (setting != undefined) {
-    var tmp = setting.split(",")
-    console.log(tmp);
-    Object.keys(result.properties).forEach(key => {
-      var co = 0
-      for (var i = 0; i < tmp.length; i++)
-        if (tmp[i] == key) {
-          co = 1;
-          break;
-        }
-      if (co == 0) {
-        delete result.properties[key]
-      }
-    })
-  }
+  // //xu ly setting
+  // if (setting != undefined) {
+  //   var tmp = setting.split(",")
+  //   console.log(tmp);
+  //   Object.keys(result.properties).forEach(key => {
+  //     var co = 0
+  //     for (var i = 0; i < tmp.length; i++)
+  //       if (tmp[i] == key) {
+  //         co = 1;
+  //         break;
+  //       }
+  //     if (co == 0) {
+  //       delete result.properties[key]
+  //     }
+  //   })
+  // }
   return result;
 };
-const getAllProducts = async (page, limit, setting) => {
+const getAllProducts = async (page, limit) => {
   //chuyen thanh mang tu setting
-  var tmp = {}
-  if (setting != undefined)
-    tmp = setting.split(",")
+  // var tmp = {}
+  // if (setting != undefined)
+  //   tmp = setting.split(",")
   // lay du lieu
-  var result = await ProductModel
+
+  var setting = (await SettingModel.findOne()).properties
+
+  var products = await ProductModel
     .find({
       status: ProductStatus.ACTIVE
     })
@@ -55,26 +64,26 @@ const getAllProducts = async (page, limit, setting) => {
     .skip(limit * page);
 
   //forEach
-  result.forEach(forEachFunc)
-
-  function forEachFunc(item, index) {
-    if (item.properties != undefined)
+  products.forEach(forEachFunc)
+  function forEachFunc(product, index) {
+    if (product.properties != undefined)
       //xu ly trong properties
-      Object.keys(item.properties).forEach(key => {
+      Object.keys(product.properties).forEach(ProductKey => {
         if (setting != undefined) {
-          var co = 0
-          for (var i = 0; i < tmp.length; i++)
-            if (tmp[i] == key) {
-              co = 1;
-              break;
-            }
+            var co = 0
+              setting.forEach(SettingKey => {
+                if(ProductKey == SettingKey )
+                 {
+                   co = 1;
+                 }
+              })
           if (co == 0) {
-            delete item.properties[key]
+            delete product.properties[ProductKey]
           }
         }
       })
   }
-  return result;
+  return products;
 };
 
 
@@ -90,6 +99,16 @@ const getAllProductInputByCategoryId = async (page, limit, CategoryId) => {
   return result;
 };
 
+const updateSetting = async (data) => {
+  var _id = (await SettingModel.findOne().where('_id'))._id
+  const result = await SettingModel.updateOne({
+    _id
+  }, {
+    ...data
+  });
+  if (result.n === result.nModified) return true;
+  return false;
+}
 
 const updateProduct = async (_id, data) => {
   var newData = (await ProductModel
@@ -124,22 +143,22 @@ const updateProduct = async (_id, data) => {
     data.properties = newData.properties
 
   //xu ly maxSizeOfProperties
-  var maxSizeOfProperties = (await ProductModel
-      .findOne({
-        _id,
-        status: ProductStatus.ACTIVE
-      }))
-    .maxSizeOfProperties;
-  if (data.maxSizeOfProperties != undefined) {
-    maxSizeOfProperties = data.maxSizeOfProperties
-  }
-  var keyCount = 0
-  if (data.properties != undefined)
-    Object.keys(data.properties).forEach(key => {
-      if (data.properties[key].status == "ACTIVE")
-        keyCount += 1
-    })
-  if (keyCount > maxSizeOfProperties) return NaN
+  // var maxSizeOfProperties = (await ProductModel
+  //     .findOne({
+  //       _id,
+  //       status: ProductStatus.ACTIVE
+  //     }))
+  //   .maxSizeOfProperties;
+  // if (data.maxSizeOfProperties != undefined) {
+  //   maxSizeOfProperties = data.maxSizeOfProperties
+  // }
+  // var keyCount = 0
+  // if (data.properties != undefined)
+  //   Object.keys(data.properties).forEach(key => {
+  //     if (data.properties[key].status == "ACTIVE")
+  //       keyCount += 1
+  //   })
+  // if (keyCount > maxSizeOfProperties) return NaN
 
   const result = await ProductModel.updateOne({
     _id,
@@ -147,16 +166,16 @@ const updateProduct = async (_id, data) => {
   }, {
     ...data
   });
-  //cap nhat lai maxSizeOfProperties cho toan bo
-  var dt = await ProductModel
-    .find()
-  dt.forEach(forEachFunc)
-
-  function forEachFunc(item, index) {
-    if (item.maxSizeOfProperties != undefined)
-      item.maxSizeOfProperties = maxSizeOfProperties
-    item.save
-  }
+  // //cap nhat lai maxSizeOfProperties cho toan bo
+  // var dt = await ProductModel
+  //   .find()
+  // dt.forEach(forEachFunc)
+  //
+  // function forEachFunc(item, index) {
+  //   if (item.maxSizeOfProperties != undefined)
+  //     item.maxSizeOfProperties = maxSizeOfProperties
+  //   item.save
+  // }
   //kiem tra cap nhat
   if (result.n === result.nModified) return true;
   return false;
@@ -196,5 +215,7 @@ export default {
   updateProduct,
   convertArrayToString,
   getProductsByFilter,
-  blockProduct
+  blockProduct,
+  createSetting,
+  updateSetting
 };

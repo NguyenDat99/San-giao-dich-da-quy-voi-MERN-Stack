@@ -47,6 +47,17 @@ const createProduct = async (req, res) => {
     }
 };
 
+const createSetting = async (req, res) => {
+//    const { jwt } = req.headers;
+    const data = req.body;
+    try {
+        const Setting = await ProductRepository.createSetting(data);
+        if (!Setting) throw new NotImplementError(CreateProductErrors.CREATE_FAIL);
+        return res.onSuccess(Setting);
+    } catch (error) {
+        return res.onError(error);
+    }
+};
 
 
 const getAllProducts = async (req, res) => {
@@ -55,14 +66,13 @@ const getAllProducts = async (req, res) => {
     let parsedQs = querystring.parse(parsedUrl.query);
     const page = parsedQs.page
     const limit = parsedQs.limit
-    const setting=parsedQs.setting
     try {
         const authenData = VerifyToken(jwt);
         if (!authenData) throw new NotImplementError(GetProductsErrors.AUTH_FAIL);
         if (authenData.role !== AccountRole.MANAGER) {
             throw new Unauthorized(GetProductsErrors.NO_RIGHT);
         }
-        const products = await ProductRepository.getAllProducts(parseInt(page),parseInt(limit),setting);
+        const products = await ProductRepository.getAllProducts(parseInt(page),parseInt(limit));
         if (!products) throw new NotFoundError(GetProductsErrors.GET_FAIL);
         return res.onSuccess(products);
     } catch (error) {
@@ -134,6 +144,16 @@ const updateProduct = async (req, res) => {
     }
 };
 
+const updateSetting = async (req, res) => {
+    const data = req.body;
+    try {
+        const updated = await ProductRepository.updateSetting(data);
+        if (updated != true) throw new NotImplementError(UpdateProductErrors.UPDATED_FAILURE);
+        return res.onSuccess(updated);
+    } catch (error) {
+        return res.onError(error);
+    }
+};
 
 const blockProduct = async (req, res) => {
     const { jwt } = req.headers;
@@ -163,4 +183,6 @@ export default {
     updateProduct,
     blockProduct,
     getProductByFilter,
+    createSetting,
+    updateSetting
 };

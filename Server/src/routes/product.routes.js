@@ -6,10 +6,15 @@ const router = express.Router();
 
 // POST
 router.post('/product/', ProductValidate.createProductInput, ProductController.createProduct);
+// init setting
+router.post('/product/setting/init', ProductController.createSetting);
 
 // PUT
 router.put('/product/:productId', ProductValidate.updateProductInput, ProductController.updateProduct);
 // router.put('product/sold-out/:productId', ProductValidate.soldOutProductInput, ProductController.soldOutProduct);
+// init setting
+router.put('/product/setting/update', ProductController.updateSetting);
+
 
 // GET
 router.get('/product/:productId', ProductValidate.getProductInput, ProductController.getProduct);

@@ -32,11 +32,11 @@ const ProductSchema = new Schema({
         ref: 'Category',
         required: true,
     }
-    ,
-    maxSizeOfProperties:{
-      type: Number,
-      default: 5
-    }
+    // ,
+    // maxSizeOfProperties:{
+    //   type: Number,
+    //   default: 5
+    // }
     ,
     properties: {}
 }, {
